@@ -5,13 +5,29 @@
 package hr.algebra.views;
 
 import hr.algebra.dal.RepositoryFactory;
+import hr.algebra.dal.models.Movie;
+import hr.algebra.dal.models.MovieTableModel;
 import hr.algebra.dal.models.People;
+import hr.algebra.dal.models.PeopleAndMovie;
 import static hr.algebra.utilities.MessageUtils.showErrorMessage;
+import static hr.algebra.utilities.MessageUtils.showInformationMessage;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
+import javax.swing.DropMode;
+import javax.swing.JComponent;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
+import static javax.swing.TransferHandler.COPY;
 
 /**
  *
@@ -22,9 +38,16 @@ public class MoviePanel extends javax.swing.JPanel {
     /**
      * Creates new form MoviePanel
      */
+    private final DefaultListModel<String> destinationModelActors = new DefaultListModel<>();        
+    private final DefaultListModel<String> destinationModel = new DefaultListModel<>();    
+    private final DefaultListModel<String> destinationModelDirectors = new DefaultListModel<>();
+
+    
+
     public MoviePanel() {
         initComponents();
         LoadData();
+
     }
 
     /**
@@ -38,7 +61,7 @@ public class MoviePanel extends javax.swing.JPanel {
 
         jpMovies = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableMovies = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -48,9 +71,9 @@ public class MoviePanel extends javax.swing.JPanel {
         tfTitle = new javax.swing.JTextField();
         tfDuration = new javax.swing.JTextField();
         tfDescription = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnEditMovie = new javax.swing.JButton();
+        btnUploadPhoto = new javax.swing.JButton();
+        btnAddMovie = new javax.swing.JButton();
         jspActors = new javax.swing.JScrollPane();
         listActors = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
@@ -66,7 +89,7 @@ public class MoviePanel extends javax.swing.JPanel {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableMovies.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -77,7 +100,12 @@ public class MoviePanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tableMovies.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMoviesMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableMovies);
 
         jLabel1.setText("ID:");
 
@@ -90,13 +118,21 @@ public class MoviePanel extends javax.swing.JPanel {
         lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/no_image.png"))); // NOI18N
         lbIcon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        lbID.setText("id");
+        btnEditMovie.setText("Edit movie");
+        btnEditMovie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditMovieActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Edit movie");
+        btnUploadPhoto.setText("Upload photo");
 
-        jButton2.setText("Upload photo");
-
-        jButton3.setText("Add Movie");
+        btnAddMovie.setText("Add Movie");
+        btnAddMovie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddMovieActionPerformed(evt);
+            }
+        });
 
         jspActors.setViewportView(listActors);
 
@@ -119,11 +155,11 @@ public class MoviePanel extends javax.swing.JPanel {
                     .addGroup(jpMoviesLayout.createSequentialGroup()
                         .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMoviesLayout.createSequentialGroup()
-                                .addComponent(jButton3)
+                                .addComponent(btnAddMovie)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)
+                                .addComponent(btnEditMovie)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2))
+                                .addComponent(btnUploadPhoto))
                             .addGroup(jpMoviesLayout.createSequentialGroup()
                                 .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpMoviesLayout.createSequentialGroup()
@@ -191,9 +227,9 @@ public class MoviePanel extends javax.swing.JPanel {
                                         .addComponent(tfDescription, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jButton3)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2)))
+                                    .addComponent(btnAddMovie)
+                                    .addComponent(btnEditMovie)
+                                    .addComponent(btnUploadPhoto)))
                             .addGroup(jpMoviesLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(jspDirectors, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -228,13 +264,142 @@ public class MoviePanel extends javax.swing.JPanel {
 
     private void formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_formHierarchyChanged
         LoadData();
+        initDragAndDrop();
     }//GEN-LAST:event_formHierarchyChanged
+
+    private void btnAddMovieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMovieActionPerformed
+        if(!movieFormValid()){
+            return;
+        }
+        try {
+            Movie movieData = new Movie();
+            
+            movieData.setTitle(tfTitle.getText().trim());
+            movieData.setDuration(tfDuration.getText().trim());
+            movieData.setDescription(tfDescription.getText().trim());
+            
+            ListModel modelActors = listActors.getModel();
+            ListModel modelDirectors = listDirectors.getModel();
+            
+            List<People> actorsList = new ArrayList<>();
+            List<People> directorsList = new ArrayList<>();
+            
+                        
+            int movieID = RepositoryFactory.getRepository().saveMovie(movieData);
+            int actorsID = 0;
+            int directorID = 0;
+            
+            for(int i=0; i < modelActors.getSize(); i++){
+                Object o =  modelActors.getElementAt(i);
+                String data = o.toString();
+                String[]  peopleData = data.split(" ");
+                actorsID = RepositoryFactory.getRepository().saveActors(movieID, Integer.parseInt(peopleData[0]));
+                actorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
+            }
+
+            for(int i=0; i < modelDirectors.getSize(); i++){
+                Object o =  modelDirectors.getElementAt(i);
+                String data = o.toString();
+                String[]  peopleData = data.split(" ");
+                directorID = RepositoryFactory.getRepository().saveDirectors(movieID, Integer.parseInt(peopleData[0]));
+                directorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
+            }
+            if(movieID > 0 && directorID > 0 && actorsID > 0){
+                showInformationMessage("Success", "New Movie add");
+                initTable();
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_btnAddMovieActionPerformed
+
+    private void tableMoviesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMoviesMouseClicked
+        try {
+            int selectedRow = Integer.parseInt(tableMovies.getValueAt(tableMovies.getSelectedRow(), 0).toString());
+            Optional<Movie> selectedMovie = RepositoryFactory.getRepository().getMovie(selectedRow);
+            if(!selectedMovie.isEmpty()){
+                int movieid = selectedMovie.get().getId();
+                lbID.setText(Integer.toString(movieid));
+                tfTitle.setText(selectedMovie.get().getTitle());                
+                tfDuration.setText(selectedMovie.get().getDuration());                
+                tfDescription.setText(selectedMovie.get().getDescription());
+                destinationModelDirectors.clear();
+                destinationModelActors.clear();
+                List<People> selectedMovieActors = RepositoryFactory.getRepository().getMovieActors(selectedRow);
+                DefaultListModel<String> actors = new DefaultListModel<>();
+                listActors.setModel(actors);
+                for (People actor : selectedMovieActors) {
+                    actors.addElement(actor.toString());
+                }
+                listActors.setModel(actors);
+                List<People> selectedMovieDirectors = RepositoryFactory.getRepository().getMovieDirectors(selectedRow);
+                DefaultListModel<String> direcotrs = new DefaultListModel<>();
+                listDirectors.setModel(actors);
+                for (People director : selectedMovieDirectors) {
+                    direcotrs.addElement(director.toString());
+                }
+                listDirectors.setModel(direcotrs);
+            }else{
+               showErrorMessage("Error", "Movies details didnt fatch");
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_tableMoviesMouseClicked
+
+    private void btnEditMovieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditMovieActionPerformed
+        try {
+            Movie movieUpdateData = new Movie(
+                    Integer.valueOf(lbID.getText()),
+                    tfTitle.getText().trim(),
+                    tfDuration.getText().trim(),
+                    tfDescription.getText().trim(),
+                    ""
+            );
+            int actorsID = 0;
+            int directorID = 0;
+            RepositoryFactory.getRepository().updateMovie(movieUpdateData);            
+            RepositoryFactory.getRepository().deleteActors(movieUpdateData.getId());
+            RepositoryFactory.getRepository().deleteDirectors(movieUpdateData.getId());
+            
+                        
+            ListModel modelActors = listActors.getModel();
+            ListModel modelDirectors = listDirectors.getModel();
+            
+            List<People> actorsList = new ArrayList<>();
+            List<People> directorsList = new ArrayList<>();
+            
+            for(int i=0; i < modelActors.getSize(); i++){
+                Object o =  modelActors.getElementAt(i);
+                String data = o.toString();
+                String[]  peopleData = data.split(" ");
+                actorsID = RepositoryFactory.getRepository().saveActors(movieUpdateData.getId(), Integer.parseInt(peopleData[0]));
+                actorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
+            }
+
+            for(int i=0; i < modelDirectors.getSize(); i++){
+                Object o =  modelDirectors.getElementAt(i);
+                String data = o.toString();
+                String[]  peopleData = data.split(" ");
+                directorID = RepositoryFactory.getRepository().saveDirectors(movieUpdateData.getId(), Integer.parseInt(peopleData[0]));
+                directorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
+            }
+            initTable();
+            
+        } catch (Exception ex) {
+            Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_btnEditMovieActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAddMovie;
+    private javax.swing.JButton btnEditMovie;
+    private javax.swing.JButton btnUploadPhoto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -242,7 +407,6 @@ public class MoviePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel jpMovies;
     private javax.swing.JScrollPane jspActors;
     private javax.swing.JScrollPane jspDirectors;
@@ -252,11 +416,14 @@ public class MoviePanel extends javax.swing.JPanel {
     private javax.swing.JList<String> listActors;
     private javax.swing.JList<String> listDirectors;
     private javax.swing.JList<String> listPeople;
+    private javax.swing.JTable tableMovies;
     private javax.swing.JTextField tfDescription;
     private javax.swing.JTextField tfDuration;
     private javax.swing.JTextField tfTitle;
     // End of variables declaration//GEN-END:variables
 
+    
+    
     void LoadPeople() {
 
         List<People> peoples;
@@ -265,20 +432,103 @@ public class MoviePanel extends javax.swing.JPanel {
             listPeople.removeAll();
             DefaultListModel<String> list = new DefaultListModel<>();
             for (People people : peoples) {
-                list.addElement(people.getName());
+                list.addElement(people.toString());
             }
             //peoples.forEach.addElement(people.getName());forEach(people -> {
             //    list.addElement(people.getName());
             //});
-            listPeople.setModel(list); 
+            listPeople.setModel(list);
         } catch (Exception ex) {
             Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
+
     private void LoadData() {
         LoadPeople();
+        initTable();
+    }
 
+    private void initDragAndDrop() {
+        listPeople.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listPeople.setDragEnabled(true);
+        listPeople.setTransferHandler(new ExportTransferHandler());
+
+        listActors.setDropMode(DropMode.ON);
+        listActors.setTransferHandler(new ImportTransferHandler());
+
+        listDirectors.setDropMode(DropMode.ON);
+        listDirectors.setTransferHandler(new ImportTransferHandler());
+    }
+
+    private void initTable() {
+        try {
+            List<Movie> movies = RepositoryFactory.getRepository().getMovies();
+            //        List<Movie> movies = MovieParser.parse();
+            tableMovies.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            tableMovies.setRowHeight(40);
+            tableMovies.setAutoCreateRowSorter(true);
+            MovieTableModel movieTableModel = new MovieTableModel(movies);
+            tableMovies.setModel(movieTableModel);
+        } catch (Exception ex) {
+            Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private boolean movieFormValid() {
+        return !tfTitle.getText().trim().isEmpty() && !tfDescription.getText().trim().isEmpty() && !tfDuration.getText().trim().isEmpty();
+    }
+
+    private class ExportTransferHandler extends TransferHandler {
+
+        @Override
+        public int getSourceActions(JComponent c) {
+            // defines icon shown in target before drop
+            return COPY;
+            //return MOVE;
+        }
+
+        @Override
+        public Transferable createTransferable(JComponent c) {
+            return new StringSelection(listPeople.getSelectedValue());
+        }
+    }
+
+    private class ImportTransferHandler extends TransferHandler {
+
+        // we define whether we can import stringFlavor that we need for JList<String>
+        @Override
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+        }
+
+        // we import the data
+        @Override
+        public boolean importData(TransferHandler.TransferSupport support) {
+            try {
+                Transferable transferable = support.getTransferable();
+
+                String data = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+
+                if (support.getComponent() == listActors) {
+                    if (!destinationModel.contains(data)) {
+                        destinationModelActors.addElement(data);
+                        listActors.setModel(destinationModelActors);
+                        return true;
+                    }
+                } else if (support.getComponent() == listDirectors) {
+                    if (!destinationModel.contains(data)) {
+                        destinationModelDirectors.addElement(data);
+                        listDirectors.setModel(destinationModelDirectors);
+                        return true;
+                    }
+                }
+
+            } catch (UnsupportedFlavorException | IOException ex) {
+                Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return false;
+        }
     }
 }

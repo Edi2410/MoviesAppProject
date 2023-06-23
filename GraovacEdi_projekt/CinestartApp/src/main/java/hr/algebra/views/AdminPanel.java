@@ -4,6 +4,16 @@
  */
 package hr.algebra.views;
 
+import hr.algebra.dal.RepositoryFactory;
+import hr.algebra.dal.models.Movie;
+import hr.algebra.dal.models.MovieArchive;
+import hr.algebra.utilities.JAXBUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
+
 /**
  *
  * @author egraedi
@@ -26,19 +36,70 @@ public class AdminPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnXMLsave = new javax.swing.JButton();
+        btnDeleteAll = new javax.swing.JButton();
+
+        btnXMLsave.setText("XML download");
+        btnXMLsave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXMLsaveActionPerformed(evt);
+            }
+        });
+
+        btnDeleteAll.setText("Empty Database");
+        btnDeleteAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteAllActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnXMLsave, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                    .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(249, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnXMLsave)
+                .addGap(18, 18, 18)
+                .addComponent(btnDeleteAll)
+                .addContainerGap(230, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    public static String FILENAME = "src/main/resources/xmlmovie.xml";
+    
+    private void btnXMLsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXMLsaveActionPerformed
+        try {
+            MovieArchive moviesArchive = new MovieArchive(RepositoryFactory.getRepository().getMovies());
+            JAXBUtils.save(moviesArchive, FILENAME);
+            
+            
+        } catch (Exception ex) {
+            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnXMLsaveActionPerformed
+
+    private void btnDeleteAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAllActionPerformed
+        try {
+            RepositoryFactory.getRepository().deleteAll();
+        } catch (Exception ex) {
+            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeleteAllActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeleteAll;
+    private javax.swing.JButton btnXMLsave;
     // End of variables declaration//GEN-END:variables
 }
