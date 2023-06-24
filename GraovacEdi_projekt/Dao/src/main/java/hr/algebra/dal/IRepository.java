@@ -32,6 +32,7 @@ public interface IRepository {
     int saveActors(int movieID, int userID)throws Exception;
     int saveDirectors(int movieID, int userID)throws Exception;    
     void deleteAll()throws Exception;
+    void loadMovies(List<Movie> movies) throws Exception;
 
 }
 

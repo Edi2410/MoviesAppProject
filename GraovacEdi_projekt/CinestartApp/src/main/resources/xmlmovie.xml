@@ -1,4 +1,444 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <moviearchive>
-    <movies/>
+    <movies>
+        <movie>
+            <id>270</id>
+            <Title>Crni demon</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/1.6.2023_10_49_23_BLACK_DEMON_FINAL_HR.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Josh Lucas (Ford v Ferrari, Yellowstone) ima glavnu ulogui u ovom napetom horor trileru redatelja fil</Description>
+            <Duration>100</Duration>
+            <PhotoPath>assets\1.6.2023_10_49_23_BLACK_DEMON_FINAL_HR.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1537</Id>
+                    <Name>Josh Lucas</Name>
+                </actors>
+                <actors>
+                    <Id>1538</Id>
+                    <Name>Fernanda Urrejola</Name>
+                </actors>
+                <actors>
+                    <Id>1539</Id>
+                    <Name>Venus Ariel</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1540</Id>
+                    <Name>Adrian Grunberg</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>271</id>
+            <Title>Cura za sve</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/6.6.2023_14_28_52_No_hard_HR.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Jennifer Lawrence u ulozi producentice i glavne glumice u filmu Cura za sve, komediji koju režira Gene Stupnits</Description>
+            <Duration>103</Duration>
+            <PhotoPath>assets\6.6.2023_14_28_52_No_hard_HR.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1541</Id>
+                    <Name>Jennifer Lawrence</Name>
+                </actors>
+                <actors>
+                    <Id>1542</Id>
+                    <Name>Ebon Moss-Bachrach</Name>
+                </actors>
+                <actors>
+                    <Id>1543</Id>
+                    <Name>Natalie Morales</Name>
+                </actors>
+                <actors>
+                    <Id>1544</Id>
+                    <Name>Matthew Broderick</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1545</Id>
+                    <Name>Gene Stupnitsky</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>272</id>
+            <Title>Djedica ide na jug</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/12.6.2023_13_07_36_DEDEK_GRE_NA_JUG_HR.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;Film Djedica ide na jug je priča o životu, ljubavi, prijateljstvu, očekivanjima i potrazi za smislom.
+Vlado otme svog najboljeg prijate</Description>
+            <Duration>104</Duration>
+            <PhotoPath>assets\12.6.2023_13_07_36_DEDEK_GRE_NA_JUG_HR.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1546</Id>
+                    <Name>Boris Cavazza</Name>
+                </actors>
+                <actors>
+                    <Id>1547</Id>
+                    <Name>Vlado Novak</Name>
+                </actors>
+                <actors>
+                    <Id>1548</Id>
+                    <Name>Zala Djuric</Name>
+                </actors>
+                <actors>
+                    <Id>1549</Id>
+                    <Name>Goran Navojec</Name>
+                </actors>
+                <actors>
+                    <Id>1550</Id>
+                    <Name>Senko Velinov</Name>
+                </actors>
+                <actors>
+                    <Id>1551</Id>
+                    <Name>Maruša Majer</Name>
+                </actors>
+                <actors>
+                    <Id>1552</Id>
+                    <Name>Nešo Tokalić</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1553</Id>
+                    <Name>Vinci Vogue Anžlovar</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>273</id>
+            <Title>Drevna mišologija - sink</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/22.3.2023_15_44_55_ARGONUTS_HR.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Na daleki put u drevnu Grčku vodi nas mlada i pametna mišica Pattie koja je oduvijek željela postati heroina.</Description>
+            <Duration>95</Duration>
+            <PhotoPath>assets\22.3.2023_15_44_55_ARGONUTS_HR.jpg</PhotoPath>
+            <Actors/>
+            <Directors>
+                <director>
+                    <Id>1554</Id>
+                    <Name>David Alaux</Name>
+                </director>
+                <director>
+                    <Id>1555</Id>
+                    <Name>Eric Tosti</Name>
+                </director>
+                <director>
+                    <Id>1556</Id>
+                    <Name>Jean-Francois Tosti</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>274</id>
+            <Title>Elementi - sink</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/4.5.2023_10_01_45_Elemental_HR_novi.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Nova maštovita animacija studija Disney i Pixar koja govori o različitostima i njihovoj privlačnosti.&lt;br</Description>
+            <Duration>110</Duration>
+            <PhotoPath>assets\4.5.2023_10_01_45_Elemental_HR_novi.jpg</PhotoPath>
+            <Actors/>
+            <Directors>
+                <director>
+                    <Id>1557</Id>
+                    <Name>Pete Docter</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>275</id>
+            <Title>Hipnotiziran</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/5.5.2023_14_28_53_Hypnotic_HRz.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Napeti akcijski triler redatelja Roberta Rodrigueza koji je film opisao kao „Hitchcockov triler na steroidima</Description>
+            <Duration>94</Duration>
+            <PhotoPath>assets\5.5.2023_14_28_53_Hypnotic_HRz.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1558</Id>
+                    <Name>Ben Affleck</Name>
+                </actors>
+                <actors>
+                    <Id>1559</Id>
+                    <Name>Alice Braga</Name>
+                </actors>
+                <actors>
+                    <Id>1560</Id>
+                    <Name>J. D. Pardo</Name>
+                </actors>
+                <actors>
+                    <Id>1561</Id>
+                    <Name>Jeff Fahey</Name>
+                </actors>
+                <actors>
+                    <Id>1562</Id>
+                    <Name>Jackie Earle Haley</Name>
+                </actors>
+                <actors>
+                    <Id>1563</Id>
+                    <Name>William Fichtner</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1564</Id>
+                    <Name>Robert Rodriguez</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>276</id>
+            <Title>Mala sirena - sink</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/16.3.2023_13_28_15_Little_Mermaid_HR_novi.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Dugoočekivani i Oscarom nagrađeni glazbeni klasik studija Disney ove godine dolazi u igranoj verzi</Description>
+            <Duration>135</Duration>
+            <PhotoPath>assets\16.3.2023_13_28_15_Little_Mermaid_HR_novi.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1565</Id>
+                    <Name>Halle Bailey</Name>
+                </actors>
+                <actors>
+                    <Id>1566</Id>
+                    <Name>Melissa McCarthy</Name>
+                </actors>
+                <actors>
+                    <Id>1567</Id>
+                    <Name>Jonah Hauer-King</Name>
+                </actors>
+                <actors>
+                    <Id>1568</Id>
+                    <Name>Javier Bardem</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1569</Id>
+                    <Name>Rob Marshall</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>277</id>
+            <Title>Mavka: Čuvarica šume - sink</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/18.4.2023_16_34_26_Mavka_HR_zadnji.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Ovo je priča o magičnoj moći ljubavi. Ljubavi koja ljudima omogućuje otkriti i pronaći sposobnosti i kval</Description>
+            <Duration>99</Duration>
+            <PhotoPath>assets\18.4.2023_16_34_26_Mavka_HR_zadnji.jpg</PhotoPath>
+            <Actors/>
+            <Directors>
+                <director>
+                    <Id>1570</Id>
+                    <Name>Oleg Malamuz</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>278</id>
+            <Title>Misija Kandahar</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/24.4.2023_15_11_30_KANDAHAR_HR.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Gerard Butler u ulozi operativca CIA-e koji otkriva tajnu misiju u Afganistanu. Redatelj Ric Roman Waugh je s</Description>
+            <Duration>119</Duration>
+            <PhotoPath>assets\24.4.2023_15_11_30_KANDAHAR_HR.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1571</Id>
+                    <Name>Gerard Butler</Name>
+                </actors>
+                <actors>
+                    <Id>1572</Id>
+                    <Name>Bahador Foladi</Name>
+                </actors>
+                <actors>
+                    <Id>1573</Id>
+                    <Name>Olivia-Mai Barrett</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1574</Id>
+                    <Name>Ric Roman Waugh</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>279</id>
+            <Title>Paklene ulice 10</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/24.4.2023_9_14_38_Fast_X_BiH_novi.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;PAKLENE ULICE 10, deseti film istoimene sage, otvara posljednje poglavlje jedne od najpoznatijih i najpopu</Description>
+            <Duration>140</Duration>
+            <PhotoPath>assets\24.4.2023_9_14_38_Fast_X_BiH_novi.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1575</Id>
+                    <Name>Vin Diesel</Name>
+                </actors>
+                <actors>
+                    <Id>1576</Id>
+                    <Name>Michelle Rodriguez</Name>
+                </actors>
+                <actors>
+                    <Id>1577</Id>
+                    <Name>Tyrese Gibson</Name>
+                </actors>
+                <actors>
+                    <Id>1578</Id>
+                    <Name>Chris “Ludacris” Bridges</Name>
+                </actors>
+                <actors>
+                    <Id>1579</Id>
+                    <Name>Jason Momoa</Name>
+                </actors>
+                <actors>
+                    <Id>1580</Id>
+                    <Name>Nathalie Emmanuel</Name>
+                </actors>
+                <actors>
+                    <Id>1581</Id>
+                    <Name>Jordana Brewster</Name>
+                </actors>
+                <actors>
+                    <Id>1582</Id>
+                    <Name>John Cena</Name>
+                </actors>
+                <actors>
+                    <Id>1583</Id>
+                    <Name>Jason Statham</Name>
+                </actors>
+                <actors>
+                    <Id>1584</Id>
+                    <Name>Sung Kang</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1585</Id>
+                    <Name>Louis Leterrier</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>280</id>
+            <Title>Spider-Man: Putovanje kroz Spider-svijet - sink</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/3.5.2023_10_23_01_Spiderman_Across_HR.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Miles Morales vraća se za sljedeće poglavlje Oscarom nagrađivane Spider-svijet sage, SPIDER-MAN™: Puto</Description>
+            <Duration>139</Duration>
+            <PhotoPath>assets\3.5.2023_10_23_01_Spiderman_Across_HR.jpg</PhotoPath>
+            <Actors/>
+            <Directors>
+                <director>
+                    <Id>1586</Id>
+                    <Name>Joaquim Dos Santos</Name>
+                </director>
+                <director>
+                    <Id>1587</Id>
+                    <Name>Kemp Powers</Name>
+                </director>
+                <director>
+                    <Id>1588</Id>
+                    <Name>Justin K. Thompson</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>281</id>
+            <Title>The Flash</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/26.4.2023_12_05_37_Flash_HR_Main.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Omiljeni član Lige pravde, The Flash, ovog ljeta dobiva svoj prvi samostalni film, u režiji Andyja Muschiet</Description>
+            <Duration>144</Duration>
+            <PhotoPath>assets\26.4.2023_12_05_37_Flash_HR_Main.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1589</Id>
+                    <Name>Ezra Miller</Name>
+                </actors>
+                <actors>
+                    <Id>1590</Id>
+                    <Name>Michael Keaton</Name>
+                </actors>
+                <actors>
+                    <Id>1591</Id>
+                    <Name>Sasha Calle</Name>
+                </actors>
+                <actors>
+                    <Id>1592</Id>
+                    <Name>Ben Affleck</Name>
+                </actors>
+                <actors>
+                    <Id>1593</Id>
+                    <Name>Kiersey Clemons</Name>
+                </actors>
+                <actors>
+                    <Id>1594</Id>
+                    <Name>Antje Traue</Name>
+                </actors>
+                <actors>
+                    <Id>1595</Id>
+                    <Name>Michael Shannon</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1596</Id>
+                    <Name>Andy Muschietti</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>282</id>
+            <Title>Transformers: Uspon zvijeri</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/23.5.2023_10_35_41_Transformers_BiH.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Vraćajući se akciji i spektaklu koji su oduševili fanove širom svijeta, film TRANSFORMERSI: BUĐENJE ZVIJ</Description>
+            <Duration>127</Duration>
+            <PhotoPath>assets\23.5.2023_10_35_41_Transformers_BiH.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1597</Id>
+                    <Name>Anthony Ramos</Name>
+                </actors>
+                <actors>
+                    <Id>1598</Id>
+                    <Name>Dominique Fishback</Name>
+                </actors>
+                <actors>
+                    <Id>1599</Id>
+                    <Name>Tobe Nwigwe</Name>
+                </actors>
+                <actors>
+                    <Id>1600</Id>
+                    <Name>Peter Cullen</Name>
+                </actors>
+                <actors>
+                    <Id>1601</Id>
+                    <Name>Ron Perlman</Name>
+                </actors>
+                <actors>
+                    <Id>1602</Id>
+                    <Name>Peter Dinklage</Name>
+                </actors>
+                <actors>
+                    <Id>1603</Id>
+                    <Name>Michelle Yeoh</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1604</Id>
+                    <Name>Steven Caple Jr.</Name>
+                </director>
+            </Directors>
+        </movie>
+        <movie>
+            <id>283</id>
+            <Title>Boogeyman</Title>
+            <Description>&lt;img src="https://www.blitz-cinestar-bh.ba/resize.aspx?filename=Plakats/3.5.2023_12_04_20_Boogeyman_HR_zadnji.jpg&amp;amp;width=100" hspace="3" vspace="3" align="left"&gt;&lt;div style="text-align: justify;"&gt;Napeta adaptacija istoimene kratke priče slavnog Stephena Kinga koja će vam utjerati strah u kosti i z</Description>
+            <Duration>98</Duration>
+            <PhotoPath>assets\3.5.2023_12_04_20_Boogeyman_HR_zadnji.jpg</PhotoPath>
+            <Actors>
+                <actors>
+                    <Id>1605</Id>
+                    <Name>Chris Messina</Name>
+                </actors>
+                <actors>
+                    <Id>1606</Id>
+                    <Name>Vivien Lyra Blair</Name>
+                </actors>
+                <actors>
+                    <Id>1607</Id>
+                    <Name>Sophie Thatcher</Name>
+                </actors>
+            </Actors>
+            <Directors>
+                <director>
+                    <Id>1608</Id>
+                    <Name>Rob Savage</Name>
+                </director>
+            </Directors>
+        </movie>
+    </movies>
 </moviearchive>

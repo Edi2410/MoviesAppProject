@@ -66,11 +66,11 @@ CREATE or ALTER PROCEDURE createMovies
 	@MovieName NVARCHAR(300),
 	@MovieDuration NVARCHAr(300),
 	@MovieDescription NVARCHAr(300),
-	--@PhotoPath NVARCHAR(300),
+	@PhotoPath NVARCHAR(300),
 	@IDMovie INT OUTPUT
 AS 
 BEGIN 
-	INSERT INTO Movies (MovieName, Duration, MovieDescription) VALUES (@MovieName, @MovieDuration, @MovieDescription)
+	INSERT INTO Movies (MovieName, Duration, MovieDescription, PhotoPath) VALUES (@MovieName, @MovieDuration, @MovieDescription, @PhotoPath)
 	SET @IDMovie = SCOPE_IDENTITY()
 END
 GO
@@ -126,14 +126,15 @@ CREATE or ALTER PROCEDURE updateMovie
 	@IDMovie int,
 	@MovieName NVARCHAR(300),
 	@MovieDuration NVARCHAr(300),
-	@MovieDescription NVARCHAr(300)
-	--@PhotoPath NVARCHAR(300),
+	@MovieDescription NVARCHAr(300),
+	@PhotoPath NVARCHAR(300)
 AS
 BEGIN 
 	UPDATE Movies SET 
 		MovieName = @MovieName,
 		Duration = @MovieDuration,
-		MovieDescription = @MovieDescription
+		MovieDescription = @MovieDescription,
+		PhotoPath = @PhotoPath 
 	WHERE 
 		IDMovie = @IDMovie
 END

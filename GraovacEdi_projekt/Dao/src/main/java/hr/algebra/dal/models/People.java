@@ -40,6 +40,10 @@ public class People {
         return Name;
     }
 
+    public People(String Name) {
+        this.Name = Name;
+    }
+
     public People() {
     }
 

@@ -45,9 +45,9 @@ public class MovieTableModel extends AbstractTableModel {
             case 1:
                 return movies.get(rowIndex).getTitle();
             case 2:
-                return movies.get(rowIndex).getDescription();
-            case 3:
                 return movies.get(rowIndex).getDuration();
+            case 3:
+                return movies.get(rowIndex).getDescription();
             default:
                 throw new RuntimeException("No such column");
         }

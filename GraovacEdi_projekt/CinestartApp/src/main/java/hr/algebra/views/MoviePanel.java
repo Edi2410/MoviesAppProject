@@ -9,13 +9,21 @@ import hr.algebra.dal.models.Movie;
 import hr.algebra.dal.models.MovieTableModel;
 import hr.algebra.dal.models.People;
 import hr.algebra.dal.models.PeopleAndMovie;
+import hr.algebra.utilities.FileUtils;
+import static hr.algebra.utilities.FileUtils.copy;
+import hr.algebra.utilities.IconUtils;
+import hr.algebra.utilities.MessageUtils;
 import static hr.algebra.utilities.MessageUtils.showErrorMessage;
 import static hr.algebra.utilities.MessageUtils.showInformationMessage;
+import static hr.algebra.views.AdminPanel.PHOTO_PATH;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -24,6 +32,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.DropMode;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.TransferHandler;
@@ -38,11 +47,12 @@ public class MoviePanel extends javax.swing.JPanel {
     /**
      * Creates new form MoviePanel
      */
-    private final DefaultListModel<String> destinationModelActors = new DefaultListModel<>();        
-    private final DefaultListModel<String> destinationModel = new DefaultListModel<>();    
+    private final DefaultListModel<String> destinationModelActors = new DefaultListModel<>();
+    private final DefaultListModel<String> destinationModel = new DefaultListModel<>();
     private final DefaultListModel<String> destinationModelDirectors = new DefaultListModel<>();
-
-    
+    public static boolean isMovieSelected = false;
+    public static String PHOTO_PATH = "src/main/resources/assets";
+    public static String DEFAULT_PHOTO_PATH = "src/main/resources/assets/no_image.png";
 
     public MoviePanel() {
         initComponents();
@@ -82,7 +92,10 @@ public class MoviePanel extends javax.swing.JPanel {
         listPeople = new javax.swing.JList<>();
         jspDirectors = new javax.swing.JScrollPane();
         listDirectors = new javax.swing.JList<>();
+        tfPhotoPath = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
+        setPreferredSize(new java.awt.Dimension(1100, 700));
         addHierarchyListener(new java.awt.event.HierarchyListener() {
             public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
                 formHierarchyChanged(evt);
@@ -115,8 +128,9 @@ public class MoviePanel extends javax.swing.JPanel {
 
         jLabel4.setText("Description:");
 
-        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/no_image.png"))); // NOI18N
         lbIcon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lbIcon.setMaximumSize(new java.awt.Dimension(500, 350));
+        lbIcon.setMinimumSize(new java.awt.Dimension(500, 350));
 
         btnEditMovie.setText("Edit movie");
         btnEditMovie.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +140,11 @@ public class MoviePanel extends javax.swing.JPanel {
         });
 
         btnUploadPhoto.setText("Upload photo");
+        btnUploadPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadPhotoActionPerformed(evt);
+            }
+        });
 
         btnAddMovie.setText("Add Movie");
         btnAddMovie.addActionListener(new java.awt.event.ActionListener() {
@@ -144,104 +163,120 @@ public class MoviePanel extends javax.swing.JPanel {
 
         jspDirectors.setViewportView(listDirectors);
 
+        jLabel7.setText("Photo path");
+
         javax.swing.GroupLayout jpMoviesLayout = new javax.swing.GroupLayout(jpMovies);
         jpMovies.setLayout(jpMoviesLayout);
         jpMoviesLayout.setHorizontalGroup(
             jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMoviesLayout.createSequentialGroup()
+            .addGroup(jpMoviesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(jpMoviesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 855, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpMoviesLayout.createSequentialGroup()
                         .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMoviesLayout.createSequentialGroup()
-                                .addComponent(btnAddMovie)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEditMovie)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUploadPhoto))
+                            .addGroup(jpMoviesLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tfPhotoPath)
+                                .addGap(223, 223, 223))
                             .addGroup(jpMoviesLayout.createSequentialGroup()
                                 .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpMoviesLayout.createSequentialGroup()
-                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMoviesLayout.createSequentialGroup()
+                                        .addComponent(btnAddMovie)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lbID))
-                                    .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(tfDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpMoviesLayout.createSequentialGroup()
-                                            .addComponent(jLabel4)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(tfDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(tfTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(1, 1, 1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpMoviesLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jspActors, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jpMoviesLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jspDirectors, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jspPeople, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(23, 23, 23))
+                                        .addComponent(btnEditMovie)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnUploadPhoto))
+                                    .addGroup(jpMoviesLayout.createSequentialGroup()
+                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jpMoviesLayout.createSequentialGroup()
+                                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(lbID))
+                                            .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(tfDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpMoviesLayout.createSequentialGroup()
+                                                    .addComponent(jLabel4)
+                                                    .addGap(12, 12, 12)
+                                                    .addComponent(tfDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(tfTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(1, 1, 1)))
+                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jpMoviesLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jspActors, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jpMoviesLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jspDirectors, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jspPeople, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)))
+                        .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jpMoviesLayout.setVerticalGroup(
             jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpMoviesLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMoviesLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpMoviesLayout.createSequentialGroup()
-                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpMoviesLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jspActors, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpMoviesLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(lbID)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(tfTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(tfDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jpMoviesLayout.createSequentialGroup()
-                                .addGap(24, 24, 24)
+                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jspActors, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpMoviesLayout.createSequentialGroup()
+                                        .addGap(25, 25, 25)
+                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel1)
+                                            .addComponent(lbID)
+                                            .addComponent(jLabel5))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel2)
+                                            .addComponent(tfTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel3)
+                                            .addComponent(tfDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel4)
-                                        .addComponent(tfDescription, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnAddMovie)
-                                    .addComponent(btnEditMovie)
-                                    .addComponent(btnUploadPhoto)))
-                            .addGroup(jpMoviesLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jspDirectors, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jpMoviesLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpMoviesLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jspPeople, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jpMoviesLayout.createSequentialGroup()
+                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jpMoviesLayout.createSequentialGroup()
+                                                .addGap(24, 24, 24)
+                                                .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(tfDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel4))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMoviesLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel6)
+                                                .addGap(47, 47, 47)))
+                                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(btnAddMovie)
+                                            .addComponent(btnEditMovie)
+                                            .addComponent(btnUploadPhoto)))
+                                    .addGroup(jpMoviesLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jspDirectors, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jspPeople, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfPhotoPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)))
+                    .addComponent(lbIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -249,62 +284,63 @@ public class MoviePanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 32, Short.MAX_VALUE)
                 .addComponent(jpMovies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpMovies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(16, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_formHierarchyChanged
         LoadData();
+        clearForm();
         initDragAndDrop();
     }//GEN-LAST:event_formHierarchyChanged
 
     private void btnAddMovieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddMovieActionPerformed
-        if(!movieFormValid()){
+        if (!movieFormValid()) {
             return;
         }
         try {
             Movie movieData = new Movie();
-            
+
             movieData.setTitle(tfTitle.getText().trim());
             movieData.setDuration(tfDuration.getText().trim());
             movieData.setDescription(tfDescription.getText().trim());
-            
+            movieData.setPhotoPath(tfPhotoPath.getText().trim());
+
             ListModel modelActors = listActors.getModel();
             ListModel modelDirectors = listDirectors.getModel();
-            
+
             List<People> actorsList = new ArrayList<>();
             List<People> directorsList = new ArrayList<>();
-            
-                        
-            int movieID = RepositoryFactory.getRepository().saveMovie(movieData);
-            int actorsID = 0;
-            int directorID = 0;
-            
-            for(int i=0; i < modelActors.getSize(); i++){
-                Object o =  modelActors.getElementAt(i);
+
+            for (int i = 0; i < modelActors.getSize(); i++) {
+                Object o = modelActors.getElementAt(i);
                 String data = o.toString();
-                String[]  peopleData = data.split(" ");
-                actorsID = RepositoryFactory.getRepository().saveActors(movieID, Integer.parseInt(peopleData[0]));
+                String[] peopleData = data.split(" ");
                 actorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
             }
-
-            for(int i=0; i < modelDirectors.getSize(); i++){
-                Object o =  modelDirectors.getElementAt(i);
+            movieData.setActors(actorsList);
+            for (int i = 0; i < modelDirectors.getSize(); i++) {
+                Object o = modelDirectors.getElementAt(i);
                 String data = o.toString();
-                String[]  peopleData = data.split(" ");
-                directorID = RepositoryFactory.getRepository().saveDirectors(movieID, Integer.parseInt(peopleData[0]));
+                String[] peopleData = data.split(" ");
                 directorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
+
             }
-            if(movieID > 0 && directorID > 0 && actorsID > 0){
+            movieData.setDirectors(directorsList);
+
+            int movieID = RepositoryFactory.getRepository().saveMovie(movieData);
+
+            if (movieID > 0) {
+                copy(movieData.getPhotoPath(), (PHOTO_PATH + File.separator + getPhotoTitle(movieData.getPhotoPath())));
                 showInformationMessage("Success", "New Movie add");
                 initTable();
             }
@@ -312,19 +348,24 @@ public class MoviePanel extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_btnAddMovieActionPerformed
 
     private void tableMoviesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMoviesMouseClicked
         try {
             int selectedRow = Integer.parseInt(tableMovies.getValueAt(tableMovies.getSelectedRow(), 0).toString());
             Optional<Movie> selectedMovie = RepositoryFactory.getRepository().getMovie(selectedRow);
-            if(!selectedMovie.isEmpty()){
+            if (!selectedMovie.isEmpty()) {
                 int movieid = selectedMovie.get().getId();
                 lbID.setText(Integer.toString(movieid));
-                tfTitle.setText(selectedMovie.get().getTitle());                
-                tfDuration.setText(selectedMovie.get().getDuration());                
+                tfTitle.setText(selectedMovie.get().getTitle());
+                tfDuration.setText(selectedMovie.get().getDuration());
                 tfDescription.setText(selectedMovie.get().getDescription());
+
+                if (Files.exists(Paths.get(selectedMovie.get().getPhotoPath()))) {
+                    tfPhotoPath.setText(selectedMovie.get().getPhotoPath());
+                    setIcon(lbIcon, new File(selectedMovie.get().getPhotoPath()));
+                }
                 destinationModelDirectors.clear();
                 destinationModelActors.clear();
                 List<People> selectedMovieActors = RepositoryFactory.getRepository().getMovieActors(selectedRow);
@@ -341,10 +382,11 @@ public class MoviePanel extends javax.swing.JPanel {
                     direcotrs.addElement(director.toString());
                 }
                 listDirectors.setModel(direcotrs);
-            }else{
-               showErrorMessage("Error", "Movies details didnt fatch");
+                isMovieSelected = true;
+            } else {
+                showErrorMessage("Error", "Movies details didnt fatch");
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -357,44 +399,64 @@ public class MoviePanel extends javax.swing.JPanel {
                     tfTitle.getText().trim(),
                     tfDuration.getText().trim(),
                     tfDescription.getText().trim(),
-                    ""
+                    tfPhotoPath.getText().trim()
             );
             int actorsID = 0;
             int directorID = 0;
-            RepositoryFactory.getRepository().updateMovie(movieUpdateData);            
+            copy(movieUpdateData.getPhotoPath(), (PHOTO_PATH + File.separator + getPhotoTitle(movieUpdateData.getPhotoPath())));
+            movieUpdateData.setPhotoPath(PHOTO_PATH + File.separator + movieUpdateData.getTitle());
+            RepositoryFactory.getRepository().updateMovie(movieUpdateData);
             RepositoryFactory.getRepository().deleteActors(movieUpdateData.getId());
             RepositoryFactory.getRepository().deleteDirectors(movieUpdateData.getId());
-            
-                        
+
             ListModel modelActors = listActors.getModel();
             ListModel modelDirectors = listDirectors.getModel();
-            
+
             List<People> actorsList = new ArrayList<>();
             List<People> directorsList = new ArrayList<>();
-            
-            for(int i=0; i < modelActors.getSize(); i++){
-                Object o =  modelActors.getElementAt(i);
+
+            for (int i = 0; i < modelActors.getSize(); i++) {
+                Object o = modelActors.getElementAt(i);
                 String data = o.toString();
-                String[]  peopleData = data.split(" ");
+                String[] peopleData = data.split(" ");
                 actorsID = RepositoryFactory.getRepository().saveActors(movieUpdateData.getId(), Integer.parseInt(peopleData[0]));
                 actorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
             }
 
-            for(int i=0; i < modelDirectors.getSize(); i++){
-                Object o =  modelDirectors.getElementAt(i);
+            for (int i = 0; i < modelDirectors.getSize(); i++) {
+                Object o = modelDirectors.getElementAt(i);
                 String data = o.toString();
-                String[]  peopleData = data.split(" ");
+                String[] peopleData = data.split(" ");
                 directorID = RepositoryFactory.getRepository().saveDirectors(movieUpdateData.getId(), Integer.parseInt(peopleData[0]));
                 directorsList.add(new People(Integer.valueOf(peopleData[0]), peopleData[1]));
             }
+
             initTable();
-            
+
         } catch (Exception ex) {
             Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_btnEditMovieActionPerformed
 
+    private void btnUploadPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadPhotoActionPerformed
+
+        File file = FileUtils.uploadFile("Images", "jpg", "jpeg", "png");
+        if (file == null) {
+            return;
+        }
+        tfPhotoPath.setText(file.getAbsolutePath());
+        setIcon(lbIcon, file);
+    }//GEN-LAST:event_btnUploadPhotoActionPerformed
+
+    private void setIcon(JLabel label, File file) {
+        try {
+            label.setIcon(IconUtils.createIcon(file, 450, 250));
+        } catch (IOException ex) {
+            MessageUtils.showErrorMessage("Error", "Unable to set icon!");
+            Logger.getLogger(MoviePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMovie;
@@ -406,6 +468,7 @@ public class MoviePanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel jpMovies;
     private javax.swing.JScrollPane jspActors;
@@ -419,11 +482,10 @@ public class MoviePanel extends javax.swing.JPanel {
     private javax.swing.JTable tableMovies;
     private javax.swing.JTextField tfDescription;
     private javax.swing.JTextField tfDuration;
+    private javax.swing.JTextField tfPhotoPath;
     private javax.swing.JTextField tfTitle;
     // End of variables declaration//GEN-END:variables
 
-    
-    
     void LoadPeople() {
 
         List<People> peoples;
@@ -480,6 +542,20 @@ public class MoviePanel extends javax.swing.JPanel {
         return !tfTitle.getText().trim().isEmpty() && !tfDescription.getText().trim().isEmpty() && !tfDuration.getText().trim().isEmpty();
     }
 
+    private void clearForm() {
+        lbID.setText("");
+        tfTitle.setText("");
+        tfDescription.setText("");
+        tfDuration.setText("");
+        tfPhotoPath.setText("");
+        setIcon(lbIcon, new File(DEFAULT_PHOTO_PATH));
+        destinationModelDirectors.clear();
+        destinationModelActors.clear();
+        listDirectors.setModel(destinationModelDirectors);
+        listActors.setModel(destinationModelActors);
+
+    }
+
     private class ExportTransferHandler extends TransferHandler {
 
         @Override
@@ -530,5 +606,11 @@ public class MoviePanel extends javax.swing.JPanel {
             }
             return false;
         }
+    }
+
+    private String getPhotoTitle(String photoPath) {
+        String[] splitetPath = photoPath.split("/");
+        return splitetPath[splitetPath.length - 1];
+
     }
 }

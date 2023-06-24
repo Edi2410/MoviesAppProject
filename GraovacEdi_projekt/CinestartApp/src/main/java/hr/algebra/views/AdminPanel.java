@@ -7,7 +7,10 @@ package hr.algebra.views;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.dal.models.Movie;
 import hr.algebra.dal.models.MovieArchive;
+import hr.algebra.rss.MovieParser;
+import static hr.algebra.utilities.FileUtils.copyFromUrl;
 import hr.algebra.utilities.JAXBUtils;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,6 +41,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
         btnXMLsave = new javax.swing.JButton();
         btnDeleteAll = new javax.swing.JButton();
+        btnRssParser = new javax.swing.JButton();
 
         btnXMLsave.setText("XML download");
         btnXMLsave.addActionListener(new java.awt.event.ActionListener() {
@@ -53,6 +57,13 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        btnRssParser.setText("Rss parser");
+        btnRssParser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRssParserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -61,7 +72,8 @@ public class AdminPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnXMLsave, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                    .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRssParser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(249, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -71,18 +83,20 @@ public class AdminPanel extends javax.swing.JPanel {
                 .addComponent(btnXMLsave)
                 .addGap(18, 18, 18)
                 .addComponent(btnDeleteAll)
-                .addContainerGap(230, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnRssParser)
+                .addContainerGap(189, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     public static String FILENAME = "src/main/resources/xmlmovie.xml";
-    
+    public static String PHOTO_PATH = "src/main/resources/assets";   
+
     private void btnXMLsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXMLsaveActionPerformed
         try {
             MovieArchive moviesArchive = new MovieArchive(RepositoryFactory.getRepository().getMovies());
             JAXBUtils.save(moviesArchive, FILENAME);
-            
-            
+
         } catch (Exception ex) {
             Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -97,9 +111,32 @@ public class AdminPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteAllActionPerformed
 
+    private void btnRssParserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRssParserActionPerformed
+        try {
+            List<Movie> movieList = MovieParser.parse();
+            for (Movie movie : movieList) {
+                copyFromUrl(movie.getPhotoPath(), (PHOTO_PATH + File.separator + getPhotoTitle(movie.getPhotoPath())));
+                movie.setPhotoPath(PHOTO_PATH + File.separator + getPhotoTitle(movie.getPhotoPath()));
+                RepositoryFactory.getRepository().saveMovie(movie);
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnRssParserActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAll;
+    private javax.swing.JButton btnRssParser;
     private javax.swing.JButton btnXMLsave;
     // End of variables declaration//GEN-END:variables
+
+    private String getPhotoTitle(String photoPath) {
+        String[] splitetPath = photoPath.split("/");
+        return splitetPath[splitetPath.length - 1];
+        
+    }
+
 }

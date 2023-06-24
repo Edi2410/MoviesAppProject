@@ -30,10 +30,28 @@ public class Movie {
     @XmlElementWrapper
     @XmlElement(name = "actors")
     private List<People> Actors;
+
+    public void setActors(List<People> Actors) {
+        this.Actors = Actors;
+    }
+
+    public void setDirectors(List<People> Directors) {
+        this.Directors = Directors;
+    }
+
+    public List<People> getActors() {
+        return Actors;
+    }
+
+    public List<People> getDirectors() {
+        return Directors;
+    }
     @XmlElementWrapper
     @XmlElement(name = "director")
     private List<People> Directors;
 
+
+    
     public Movie(int id, String Title, String Description, String Duration, String PhotoPath, List<People> Actors, List<People> Directors) {
         this.id = id;
         this.Title = Title;
@@ -89,6 +107,11 @@ public class Movie {
 
     public String getDescription() {
         return Description;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" + "id=" + id + ", Title=" + Title + ", Description=" + Description + ", Duration=" + Duration + ", PhotoPath=" + PhotoPath + ", Actors=" + Actors + ", Directors=" + Directors + '}';
     }
 
     public String getDuration() {

@@ -21,6 +21,7 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="btnXMLsave" pref="145" max="32767" attributes="0"/>
                   <Component id="btnDeleteAll" max="32767" attributes="0"/>
+                  <Component id="btnRssParser" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="249" max="32767" attributes="0"/>
           </Group>
@@ -33,7 +34,9 @@
               <Component id="btnXMLsave" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnDeleteAll" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="230" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="btnRssParser" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="189" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,6 +56,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteAllActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRssParser">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Rss parser"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRssParserActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

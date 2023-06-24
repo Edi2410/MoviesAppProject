@@ -46,22 +46,24 @@ public class SqlRepository implements IRepository {
 
     private static final String ACTORS_AND_MOVIE_ID = "IDActorAndMovie";
     private static final String DIRECTORS_AND_MOVIE_ID = "IDDirectorAndMovie";
-    private static final String ID_USER_FOR_MOVIES = "IDUserForMovies";
+    private static final String ID_USER_FOR_MOVIES = "IDUserForMovies";    
+    private static final String PHOTO_PATH = "PhotoPath";
+
 
     private static final String AUTH_USER = "{ CALL authUser (?,?) }";
     private static final String CREATE_USER = "{ CALL createUser (?,?,?) }";
     private static final String SELECT_USER = "{ CALL selectUser (?) }";
     private static final String SELECT_MOVIE = "{ CALL selectMovie (?) }";
     private static final String SELECT_MOVIE_ACTORS = "{ CALL selectMovieActors (?) }";
-    private static final String SELECT_MOVIE_DIRECTORS = "{ CALL selectMovieDirectors (?) }";   
-    private static final String DELETE_ACTORS = "{ CALL deleteActors (?) }"; 
-    private static final String DELETE_DIRECTORS = "{ CALL deleteDirectors (?) }";    
+    private static final String SELECT_MOVIE_DIRECTORS = "{ CALL selectMovieDirectors (?) }";
+    private static final String DELETE_ACTORS = "{ CALL deleteActors (?) }";
+    private static final String DELETE_DIRECTORS = "{ CALL deleteDirectors (?) }";
     private static final String DELETE_ALL = "{ CALL deleteAll }";
 
     private static final String CREATE_PEOPLE = "{ CALL createPeople (?,?) }";
     private static final String SELECT_PEOPLE = "{ CALL selectPeople }";
-    private static final String SAVE_MOVIE = "{ CALL createMovies (?,?,?,?)}";    
-    private static final String UPDATE_MOVIE = "{ CALL updateMovie (?,?,?,?)}";
+    private static final String SAVE_MOVIE = "{ CALL createMovies (?,?,?,?,?)}";
+    private static final String UPDATE_MOVIE = "{ CALL updateMovie (?,?,?,?,?)}";
     private static final String GET_MOVIES = "{ CALL selectMovies }";
     private static final String SAVE_ACTOR_AND_MOVIE = "{ CALL createActorAndMovie (?,?,?)}";
     private static final String SAVE_DIRECTOR_AND_MOVIE = "{ CALL createDirectorAndMovie (?,?,?)}";
@@ -160,7 +162,7 @@ public class SqlRepository implements IRepository {
                         rs.getString(MOVIE_DESCRIPTION),
                         rs.getString("Duration"),
                         rs.getString(MOVIE_PHOTO),
-                        getMovieActors(rs.getInt(IDMOVIE)),                        
+                        getMovieActors(rs.getInt(IDMOVIE)),
                         getMovieDirectors(rs.getInt(IDMOVIE))
                 ));
             }
@@ -170,14 +172,27 @@ public class SqlRepository implements IRepository {
 
     @Override
     public int saveMovie(Movie movie) throws Exception {
+
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection(); CallableStatement stmt = con.prepareCall(SAVE_MOVIE);) {
             stmt.setString(MOVIE_NAME, movie.getTitle());
             stmt.setString(MOVIE_DURATION, movie.getDuration());
-            stmt.setString(MOVIE_DESCRIPTION, movie.getDescription());
-            //stmt.setString(MOVIE_PHOTO, movie.getPhotoPath());
+            stmt.setString(MOVIE_DESCRIPTION, movie.getDescription());            
+            stmt.setString(PHOTO_PATH, movie.getPhotoPath());
             stmt.registerOutParameter(IDMOVIE, Types.INTEGER);
             stmt.executeUpdate();
+            int movieID = stmt.getInt(IDMOVIE);
+
+            if (movie.getActors() != null) {
+                for (People actor : movie.getActors()) {
+                    saveActors(movieID, createPeople(actor.getName()));
+                }
+            }
+            if (movie.getDirectors() != null) {
+                for (People director : movie.getDirectors()) {
+                    saveDirectors(movieID, createPeople(director.getName()));
+                }
+            }
             return stmt.getInt(IDMOVIE);
         }
     }
@@ -218,8 +233,8 @@ public class SqlRepository implements IRepository {
                     return Optional.of(new Movie(
                             rs.getInt(IDMOVIE),
                             rs.getString(MOVIE_NAME),
-                            rs.getString("duration"),
                             rs.getString(MOVIE_DESCRIPTION),
+                            rs.getString("duration"),
                             rs.getString(MOVIE_PHOTO)
                     ));
                 }
@@ -287,10 +302,11 @@ public class SqlRepository implements IRepository {
     public void updateMovie(Movie movie) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection(); CallableStatement stmt = con.prepareCall(UPDATE_MOVIE);) {
-            stmt.setInt(IDMOVIE, movie.getId());            
+            stmt.setInt(IDMOVIE, movie.getId());
             stmt.setString(MOVIE_NAME, movie.getTitle());
             stmt.setString(MOVIE_DURATION, movie.getDuration());
             stmt.setString(MOVIE_DESCRIPTION, movie.getDescription());
+            stmt.setString(PHOTO_PATH, movie.getPhotoPath());
             //stmt.setString(MOVIE_PHOTO, movie.getPhotoPath());
             stmt.executeUpdate();
         }
@@ -301,6 +317,13 @@ public class SqlRepository implements IRepository {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection(); CallableStatement stmt = con.prepareCall(DELETE_ALL);) {
             stmt.execute();
+        }
+    }
+
+    @Override
+    public void loadMovies(List<Movie> movies) throws Exception {
+        for (Movie movie : movies) {
+            saveMovie(movie);
         }
     }
 }
